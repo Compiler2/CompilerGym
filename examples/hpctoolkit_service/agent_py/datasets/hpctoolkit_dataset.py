@@ -10,6 +10,9 @@ import sys
 sys.path.insert(0, Path(__file__).parent.parent.parent.resolve())
 import utils
 
+from . import benchmark_from_file_contents
+from compiler_gym.service.proto import BenchmarkDynamicConfig, Command
+
 
 # BENCHMARKS_PATH: Path = runfiles_path("examples/hpctoolkit_service/benchmarks")
 BENCHMARKS_PATH: Path = Path(
@@ -38,6 +41,25 @@ class Dataset(Dataset):
             "benchmark://hpctoolkit-cpu-v0/nanosleep": Benchmark.from_file_contents(
                 "benchmark://hpctoolkit-cpu-v0/nanosleep",
                 self.preprocess(BENCHMARKS_PATH / "nanosleep.c"),
+            ),
+            "benchmark://hpctoolkit-cpu-v0/simple_pow": benchmark_from_file_contents(
+                "benchmark://hpctoolkit-cpu-v0/simple_pow",
+                self.preprocess(BENCHMARKS_PATH / "simple_pow.c"),
+                BenchmarkDynamicConfig(
+                    build_cmd=Command(
+                        # $CC is replaced with clang command,
+                        # $IN is replaced with benchmark path
+                        # Following are linking flags (only one in this case).
+                        argument=["$CC", "$IN", "-lm"],
+                        timeout_seconds=60,
+                        outfile=["a.out"],
+                    ),
+                    run_cmd=Command(
+                        argument=["./a.out"],
+                        timeout_seconds=300,
+                        infile=["a.out"],
+                    )
+                )
             ),
         }
 

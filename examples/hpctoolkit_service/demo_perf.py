@@ -75,6 +75,7 @@ def main():
 
         benchmark_to_process = [
             # from benchmarks directory
+            "benchmark://hpctoolkit-cpu-v0/simple_pow",
             # "benchmark://hpctoolkit-cpu-v0/offsets1",
             "benchmark://hpctoolkit-cpu-v0/conv2d",
             # "benchmark://hpctoolkit-cpu-v0/nanosleep",

@@ -51,7 +51,7 @@ class BenchmarkBuilder:
                 self.bc_path,
                 "-o",
                 self.exe_path,
-                "-lm",
+                # "-lm",
             ],  # "-nostartfiles"
             "save": [self.llvm_dis, "-o", self.llvm_new_path, self.bc_path],
         }
